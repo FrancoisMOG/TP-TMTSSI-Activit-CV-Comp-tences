@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activité CV – Technicien en système de sécurité incendie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- STYLE ISSU DE CONSIGNE2.HTML --- */
+    :root {
+      --primary-blue: #1e3a8a; /* */
+      --accent-blue: #3b82f6;  /* */
+      --bg-slate: #e2e8f0;     /* */
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --success: #15803d;
+      --warning: #b45309;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+    #consignes-view {
+      background: var(--bg-slate);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .consignes-container {
+      background: white;
+      max-width: 850px;
+      width: 100%;
+      border-radius: 18px; /* */
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* */
+      overflow: hidden;
+      animation: slideIn 0.6s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .consignes-container header {
+      background: var(--primary-blue);
+      color: white;
+      padding: 35px;
+      text-align: center;
+    }
+
+    .consignes-container header h1 { font-size: 1.6rem; margin-bottom: 10px; }
+    .consignes-container header .subtitle { font-weight: 300; opacity: 0.85; letter-spacing: 0.5px; }
+
+    .main-content-consignes { padding: 40px; }
+
+    .step-section {
+      margin-bottom: 35px;
+      opacity: 0;
+      transition: all 0.6s ease;
+      transform: translateY(20px);
+    }
+    .step-section.active { opacity: 1; transform: translateY(0); }
+
+    .title-flex {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--primary-blue);
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    .info-card {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid var(--accent-blue);
+    }
+
+    .alert-banner {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-size: 0.9rem;
+    }
+
+    .consignes-container ul { list-style: none; }
+    .consignes-container li {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+    .consignes-container li::before {
+      content: "•";
+      color: var(--accent-blue);
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    .score-table {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .score-item {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .action-area { text-align: center; padding-top: 20px; }
+    .btn-launch {
+      background: var(--primary-blue);
+      color: white;
+      border: none;
+      padding: 15px 45px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 999px; /* */
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-launch:hover {
+      background: var(--accent-blue);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+    }
+
+    /* --- STYLE ISSU DE L'ACTIVITÉ --- */
+    #activity-view {
+      display: none;
+      background: #e2e8f0; /* */
+      padding: 40px;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      max-width: 1300px; /* */
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1.6fr; /* */
+      gap: 24px;
+    }
+
+    .blocks-panel {
+      background: #1e3a8a; /* */
+      color: #f1f5f9;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    .blocks-panel h2 { font-size: 1.2rem; margin-bottom: 6px; }
+    .blocks-panel p { font-size: 0.9rem; margin-bottom: 12px; color: #cbd5e1; }
+
+    .blocks-list {
+      max-height: 75vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 6px;
+    }
+
+    .block-item {
+      background: #3b82f6; /* */
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #1d4ed8;
+      cursor: grab;
+      font-size: 0.85rem;
+      transition: 0.15s;
+      position: relative;
+    }
+
+    .block-item:hover { background: #2563eb; transform: translateY(-2px); }
+    .block-item.dragging { opacity: 0.7; cursor: grabbing; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+
+    .block-remove {
+      position: absolute;
+      top: 4px; right: 6px;
+      background: #ef4444; /* */
+      color: white;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      font-size: 0.7rem;
+      display: flex; justify-content: center; align-items: center;
+      cursor: pointer;
+    }
+
+    .cv-container {
+      background: white;
+      padding: 26px;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    #pdfHeader { text-align: center; margin-bottom: 10px; display: none; }
+    #pdfHeader h1 { color: #1e3a8a; font-size: 1.4rem; margin-bottom: 4px; }
+    #pdfHeader p { color: #475569; font-size: 0.9rem; }
+
+    .cv-header { display: flex; gap: 18px; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 14px; }
+    .avatar { width: 70px; height: 70px; border-radius: 50%; background: #2563eb; color: white; display: flex; justify-content: center; align-items: center; font-size: 1.4rem; font-weight: 700; }
+    .cv-name { font-size: 1.4rem; font-weight: 700; color: #1e293b; }
+    .cv-title { font-size: 0.95rem; color: #475569; }
+
+    /* --- NOUVEAU : Styles pour les champs de saisie nom/prénom --- */
+    .cv-name {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .cv-input {
+      flex: 1;
+      min-width: 120px;
+      padding: 6px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1e293b;
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .cv-input::placeholder { color: #94a3b8; font-weight: 400; }
+    .cv-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+
+    .cv-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .cv-section-title { font-size: 1rem; font-weight: 600; margin-bottom: 6px; color: #1e293b; }
+
+    .drop-zone { background: #f8fafc; border: 2px dashed #60a5fa; border-radius: 12px; padding: 12px; min-height: 140px; display: flex; flex-direction: column; gap: 8px; transition: 0.2s; }
+    .drop-zone.highlight { background: #dbeafe; border-color: #2563eb; }
+    .drop-placeholder { font-size: 0.8rem; color: #94a3b8; font-style: italic; }
+
+    .drop-zone .block-item { background: #e0e7ff !important; color: #1e3a8a !important; border-color: #93c5fd !important; }
+
+    .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; flex-wrap: wrap; gap: 10px; }
+    .btn { padding: 8px 16px; border-radius: 999px; border: none; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-secondary { background: #e2e8f0; color: #1e293b; }
+
+    .score-badge { background: #1e293b; color: white; padding: 4px 10px; border-radius: 999px; font-size: 0.8rem; }
+    .feedback { font-size: 0.85rem; margin-top: 6px; }
+    .feedback.good { color: #15803d; }
+    .feedback.medium { color: #b45309; }
+    .feedback.bad { color: #b91c1c; }
+
+    .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.55); justify-content: center; align-items: center; }
+    .modal-content { background: white; padding: 24px; border-radius: 14px; width: 420px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+
+    @media print {
+      body { background: white; padding: 0; }
+      #consignes-view, .blocks-panel, .controls, .feedback, .modal { display: none !important; }
+      #activity-view { display: block !important; padding: 0; }
+      .app-container { display: block; max-width: 800px; margin: 0 auto; }
+      #pdfHeader { display: block !important; }
+
+      /* --- NOUVEAU : Les champs de saisie apparaissent comme du texte dans le PDF --- */
+      .cv-input {
+        border: none !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        appearance: none;
+        -webkit-appearance: none;
+      }
+      .cv-input::placeholder { color: transparent !important; }
+    }
+    @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div id="consignes-view">
+    <div class="consignes-container">
+      <header>
+        <div class="subtitle">EXERCICE DE SYNTHÈSE</div>
+        <h1>Identifier les compétences du poste ciblé</h1>
+      </header>
+
+      <main class="main-content-consignes">
+        <section class="step-section" id="step1">
+          <div class="title-flex">🎯 Objectifs pédagogiques</div>
+          <div class="info-grid">
+            <div class="info-card">
+              <ul>
+                <li>Analyser un profil métier spécifique</li>
+                <li>Distinguer les compétences prioritaires</li>
+              </ul>
+            </div>
+            <div class="info-card">
+              <ul>
+                <li>Éliminer les compétences hors-sujet</li>
+                <li>Optimiser un CV pour un recruteur</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="step-section" id="step2">
+          <div class="title-flex">🧩 Description du défi</div>
+          <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-light);">
+            Vous devez construire le CV d'un candidat pour un poste spécifique. Pour réussir, vous devrez faire le tri parmi <strong>37 blocs de compétences</strong>.
+          </p>
+          <div class="alert-banner">
+            <strong>⚠️ Vigilance requise :</strong> Certaines compétences sont volontairement intégrées pour tester votre capacité à identifier le cœur d'un métier.
+          </div>
+        </section>
+
+        <section class="step-section" id="step3">
+          <div class="title-flex">✅ Consignes de sélection</div>
+          <div class="info-grid">
+            <div>
+              <p style="font-weight: 600; margin-bottom: 10px;">Compétences Professionnelles</p>
+              <ul class="info-card" style="border-left-color: #15803d;">
+                <li>Choisir <strong>10 blocs</strong> corrects</li>
+                <li>Parmi 25 propositions</li>
+              </ul>
+            </div>
+            <div>
+              <p style="font-weight: 600; margin-bottom: 10px;">Compétences Personnelles</p>
+              <ul class="info-card" style="border-left-color: #b45309;">
+                <li>Choisir <strong>6 blocs</strong> pertinents</li>
+                <li>Parmi 12 propositions</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="step-section" id="step4">
+          <div class="title-flex">🧠 Évaluation du profil</div>
+          <div class="score-table">
+            <div class="score-item" style="background: #fee2e2; color: #b91c1c;">0-6 : Insuffisant</div>
+            <div class="score-item" style="background: #fef3c7; color: #b45309;">7-12 : Profil Correct</div>
+            <div class="score-item" style="background: #dcfce7; color: #15803d;">13-16 : Expert Métier</div>
+          </div>
+        </section>
+
+        <div class="action-area">
+          <button class="btn-launch" onclick="startActivity()">DÉCOUVRIR LE POSTE ET DÉMARRER</button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="activity-view">
+    <div class="app-container">
+      <aside class="blocks-panel">
+        <h2>Blocs de compétences</h2>
+        <p>Glisse les blocs dans les bonnes zones du CV.</p>
+
+        <div class="blocks-list" id="blocksList">
+          <div class="block-item" draggable="true" data-id="pro1">Installer des systèmes de sécurité incendie (SSI)</div>
+          <div class="block-item" draggable="true" data-id="pro2">Réaliser la maintenance préventive</div>
+          <div class="block-item" draggable="true" data-id="pro3">Diagnostiquer et dépanner les systèmes</div>
+          <div class="block-item" draggable="true" data-id="pro4">Lire et interpréter des plans et schémas techniques</div>
+          <div class="block-item" draggable="true" data-id="pro5">Appliquer la réglementation incendie</div>
+          <div class="block-item" draggable="true" data-id="pro6">Paramétrer et programmer les équipements</div>
+          <div class="block-item" draggable="true" data-id="pro7">Rédiger des rapports techniques et documents réglementaires</div>
+          <div class="block-item" draggable="true" data-id="pro8">Conseiller les clients sur la conformité et les améliorations</div>
+          <div class="block-item" draggable="true" data-id="pro9">Travailler en sécurité sur site</div>
+          <div class="block-item" draggable="true" data-id="pro10">Communiquer efficacement avec les clients et l’équipe</div>
+          <div class="block-item" draggable="true" data-id="pro11">Maîtrise des systèmes adressables</div>
+          <div class="block-item" draggable="true" data-id="pro12">Intégration SSI avec systèmes de sûreté</div>
+          <div class="block-item" draggable="true" data-id="pro13">Analyse de dérangements intermittents</div>
+          <div class="block-item" draggable="true" data-id="pro14">Optimisation des tournées de maintenance</div>
+          <div class="block-item" draggable="true" data-id="pro15">Gestion des priorités en situation multi-sites</div>
+          <div class="block-item" draggable="true" data-id="pro16">Mise en conformité d’installations anciennes</div>
+          <div class="block-item" draggable="true" data-id="pro17">Formation de base des utilisateurs finaux</div>
+          <div class="block-item" draggable="true" data-id="pro18">Réalisation d’audits techniques simplifiés</div>
+          <div class="block-item" draggable="true" data-id="pro19">Gestion documentaire numérique</div>
+          <div class="block-item" draggable="true" data-id="pro20">Coordination avec les autres corps d’état</div>
+          <div class="block-item" draggable="true" data-id="pro21">Adaptation aux contraintes d’exploitation du client</div>
+          <div class="block-item" draggable="true" data-id="pro22">Participation à la mise en service globale d’un bâtiment</div>
+          <div class="block-item" draggable="true" data-id="pro23">Lecture et mise à jour de synoptiques SSI</div>
+          <div class="block-item" draggable="true" data-id="pro24">Pré-dimensionnement de petites extensions SSI</div>
+          <div class="block-item" draggable="true" data-id="pro25">Veille technique ciblée sur les évolutions SSI</div>
+          <div class="block-item" draggable="true" data-id="perso1">Rigueur et sens des responsabilités</div>
+          <div class="block-item" draggable="true" data-id="perso2">Autonomie</div>
+          <div class="block-item" draggable="true" data-id="perso3">Sens du service client</div>
+          <div class="block-item" draggable="true" data-id="perso4">Capacité d’analyse et de résolution de problèmes</div>
+          <div class="block-item" draggable="true" data-id="perso5">Adaptabilité</div>
+          <div class="block-item" draggable="true" data-id="perso6">Esprit d’équipe et communication</div>
+          <div class="block-item" draggable="true" data-id="perso7">Sens de l’anticipation</div>
+          <div class="block-item" draggable="true" data-id="perso8">Discrétion professionnelle</div>
+          <div class="block-item" draggable="true" data-id="perso9">Minutie artisanale</div>
+          <div class="block-item" draggable="true" data-id="perso10">Gestion du temps</div>
+          <div class="block-item" draggable="true" data-id="perso11">Résilience</div>
+          <div class="block-item" draggable="true" data-id="perso12">Sens de la médiation</div>
+        </div>
+      </aside>
+
+      <main class="cv-container" id="pdfArea">
+        <div id="pdfHeader">
+          <h1>Résultat de l’activité – Technicien en système de sécurité incendie</h1>
+          <p id="pdfDate"></p>
+        </div>
+
+        <header class="cv-header">
+          <div class="avatar">JD</div>
+          <div>
+            <div class="cv-name">
+              <input type="text" id="inputPrenom" placeholder="Prénom" class="cv-input" autocomplete="given-name">
+              <input type="text" id="inputNom" placeholder="Nom" class="cv-input" autocomplete="family-name">
+            </div>
+            <div class="cv-title">Candidat au poste de Technicien en système de sécurité incendie</div>
+          </div>
+        </header>
+
+        <section class="cv-body">
+          <div>
+            <div class="cv-section-title">Compétences personnelles</div>
+            <div class="drop-zone" id="dropPerso">
+              <div class="drop-placeholder">Dépose ici les qualités personnelles adaptées.</div>
+            </div>
+          </div>
+          <div>
+            <div class="cv-section-title">Compétences professionnelles</div>
+            <div class="drop-zone" id="dropPro">
+              <div class="drop-placeholder">Dépose ici les compétences professionnelles adaptées.</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="controls">
+          <button class="btn btn-primary" id="checkBtn">Corriger</button>
+          <button class="btn btn-secondary" id="resetBtn">Réinitialiser</button>
+          <button class="btn btn-secondary" id="consignesBtn">Consignes</button>
+          <button class="btn btn-primary" id="pdfBtn">Exporter PDF</button>
+          <span class="score-badge" id="scoreBadge">Score : 0 / 16</span>
+        </div>
+
+        <div class="feedback" id="feedbackText">
+          Glisse les blocs dans les zones du CV, puis clique sur Corriger.
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="modalConsignes" class="modal">
+    <div class="modal-content">
+      <h2>Consignes</h2>
+      <p>
+        Sélectionne et dépose dans le CV uniquement les compétences réellement pertinentes pour un Technicien en système de sécurité incendie.
+        <br><br>
+        • 10 compétences professionnelles attendues<br>
+        • 6 compétences personnelles attendues
+      </p>
+      <button id="closeModal" class="btn btn-primary">Fermer</button>
+    </div>
+  </div>
+
+  <script>
+    /* LOGIQUE DES CONSIGNES (Consigne2.html) */
+    function showSteps() {
+      const steps = document.querySelectorAll('.step-section');
+      steps.forEach((step, index) => {
+        setTimeout(() => {
+          step.classList.add('active');
+          step.style.transform = "translateY(0)";
+        }, index * 250);
+      });
+    }
+
+    function startActivity() {
+      const container = document.querySelector('.consignes-container');
+      container.style.transition = "0.4s";
+      container.style.opacity = "0";
+      container.style.transform = "scale(0.95)";
+      
+      setTimeout(() => {
+        document.getElementById('consignes-view').style.display = 'none';
+        document.getElementById('activity-view').style.display = 'flex';
+        window.scrollTo(0, 0);
+      }, 450);
+    }
+
+    window.onload = showSteps;
+
+    /* LOGIQUE DE L'ACTIVITÉ (Activité SSI) */
+    document.addEventListener("DOMContentLoaded", () => {
+      const goodPro = ["pro1","pro2","pro3","pro4","pro5","pro6","pro7","pro8","pro9","pro10"];
+      const goodPerso = ["perso1","perso2","perso3","perso4","perso5","perso6"];
+
+      const blocksList = document.getElementById("blocksList");
+      const dropZones = document.querySelectorAll(".drop-zone");
+      const checkBtn = document.getElementById("checkBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const consignesBtn = document.getElementById("consignesBtn");
+      const pdfBtn = document.getElementById("pdfBtn");
+      const scoreBadge = document.getElementById("scoreBadge");
+      const feedbackText = document.getElementById("feedbackText");
+      const modal = document.getElementById("modalConsignes");
+      const closeModal = document.getElementById("closeModal");
+      const pdfHeader = document.getElementById("pdfHeader");
+      const pdfDate = document.getElementById("pdfDate");
+      let dragged = null;
+
+      function shuffleBlocks() {
+        const items = Array.from(blocksList.children);
+        for (let i = items.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [items[i], items[j]] = [items[j], items[i]];
+        }
+        items.forEach(el => blocksList.appendChild(el));
+      }
+
+      function addRemoveButton(block) {
+        if (block.querySelector(".block-remove")) return;
+        const btn = document.createElement("div");
+        btn.className = "block-remove";
+        btn.textContent = "×";
+        btn.addEventListener("click", () => { btn.remove(); blocksList.appendChild(block); });
+        block.appendChild(btn);
+      }
+
+      function removeRemoveButton(block) {
+        const btn = block.querySelector(".block-remove");
+        if (btn) btn.remove();
+      }
+
+      function activateDragAndDrop() {
+        const blocks = document.querySelectorAll(".block-item");
+        blocks.forEach(block => {
+          block.setAttribute("draggable", "true");
+          block.addEventListener("dragstart", () => { dragged = block; block.classList.add("dragging"); });
+          block.addEventListener("dragend", () => { dragged = null; block.classList.remove("dragging"); });
+        });
+
+        dropZones.forEach(zone => {
+          zone.addEventListener("dragover", e => { e.preventDefault(); zone.classList.add("highlight"); });
+          zone.addEventListener("dragleave", () => { zone.classList.remove("highlight"); });
+          zone.addEventListener("drop", e => {
+            e.preventDefault();
+            zone.classList.remove("highlight");
+            if (dragged) {
+              const placeholder = zone.querySelector(".drop-placeholder");
+              if (placeholder) placeholder.remove();
+              zone.appendChild(dragged);
+              addRemoveButton(dragged);
+            }
+          });
+        });
+
+        blocksList.addEventListener("dragover", e => e.preventDefault());
+        blocksList.addEventListener("drop", e => {
+          e.preventDefault();
+          if (dragged) { removeRemoveButton(dragged); blocksList.appendChild(dragged); }
+        });
+      }
+
+      function getIds(zone) {
+        return [...zone.querySelectorAll(".block-item")].map(b => b.dataset.id);
+      }
+
+      function resetActivity() {
+        document.querySelectorAll(".block-item").forEach(b => { removeRemoveButton(b); blocksList.appendChild(b); });
+        dropZones.forEach(zone => {
+          const isPerso = zone.id === "dropPerso";
+          zone.innerHTML = `<div class="drop-placeholder">Dépose ici les ${isPerso ? "qualités personnelles" : "compétences professionnelles"} adaptées.</div>`;
+        });
+        shuffleBlocks();
+        scoreBadge.textContent = "Score : 0 / 16";
+        feedbackText.textContent = "Glisse les blocs dans les zones du CV, puis clique sur Corriger.";
+        feedbackText.className = "feedback";
+        activateDragAndDrop();
+      }
+
+      checkBtn.addEventListener("click", () => {
+        const proIds = getIds(document.getElementById("dropPro"));
+        const persoIds = getIds(document.getElementById("dropPerso"));
+        let score = 0;
+        goodPro.forEach(id => { if (proIds.includes(id)) score++; });
+        goodPerso.forEach(id => { if (persoIds.includes(id)) score++; });
+
+        scoreBadge.textContent = `Score : ${score} / 16`;
+        let appreciation = (score <= 6) ? "Résultat insuffisant" : (score <= 12) ? "Résultat correct" : "Très bon travail";
+        feedbackText.className = "feedback " + ((score <= 6) ? "bad" : (score <= 12) ? "medium" : "good");
+        feedbackText.textContent = `${appreciation} — Score : ${score} / 16`;
+      });
+
+      resetBtn.addEventListener("click", resetActivity);
+      consignesBtn.addEventListener("click", () => { modal.style.display = "flex"; });
+      closeModal.addEventListener("click", () => { modal.style.display = "none"; });
+      window.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
+
+      pdfBtn.addEventListener("click", () => {
+        pdfDate.textContent = "Date : " + new Date().toLocaleDateString("fr-FR");
+        pdfHeader.style.display = "block";
+        window.print();
+        setTimeout(() => { pdfHeader.style.display = "none"; }, 500);
+      });
+
+      shuffleBlocks();
+      activateDragAndDrop();
+    });
+  </script>
+</body>
+</html>
